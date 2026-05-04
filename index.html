@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=5">
 </head>
 <body>
 
@@ -33,7 +33,14 @@
   <section class="hero fade-in">
     <h1>El Poder del Control Financiero Total</h1>
     <p>Fynx Elite analiza tus finanzas, predice tu flujo de caja y te ayuda a tomar decisiones inteligentes con inteligencia artificial predictiva.</p>
-    <a href="#" class="btn-primary">Próximamente en Google Play</a>
+    <div class="waitlist-container">
+      <form id="waitlist-form" class="waitlist-form">
+        <input type="email" id="waitlist-email" placeholder="Tu correo electrónico" required />
+        <button type="submit" id="waitlist-btn" class="btn-primary">Unirme a la lista VIP</button>
+      </form>
+      <p id="waitlist-message" class="waitlist-message"></p>
+      <p class="play-store-text">🚀 Próximamente en Google Play</p>
+    </div>
   </section>
 
   <section id="about" class="about">
@@ -85,6 +92,9 @@
     </div>
   </footer>
 
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
