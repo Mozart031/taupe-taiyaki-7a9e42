@@ -7,9 +7,14 @@ const firebaseConfig = {
   appId: "1:184364852664:android:3c67cf6da748f0e8291b4d"
 };
 
-// Initialize Firebase using compat syntax
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+let db;
+// Initialize Firebase only if the SDK is loaded
+if (typeof firebase !== 'undefined') {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+} else {
+  console.warn("Firebase SDK not detected.");
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Animaciones de scroll
