@@ -1,5 +1,0 @@
-# No redirects for now to avoid breaking asset loading
-# [[redirects]]
-#   from = "/*"
-#   to = "/index.html"
-#   status = 200
