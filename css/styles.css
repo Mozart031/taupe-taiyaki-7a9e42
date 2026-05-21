@@ -142,13 +142,12 @@ nav.scrolled {
 
 /* ─── HERO ─── */
 .hero {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
-  padding: 130px 5% 80px;
+  padding: 140px 5% 70px;
   position: relative;
   overflow: hidden;
 }
@@ -344,7 +343,7 @@ nav.scrolled {
 
 .stat-value {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
