@@ -134,4 +134,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ── Before / After Slider ──
+  const splitContainer = document.querySelector('.split-container');
+  const splitAfter = document.querySelector('.split-after');
+  const splitSlider = document.querySelector('.split-slider');
+
+  if (splitContainer) {
+    let isDragging = false;
+
+    const onSlide = (e) => {
+      if (!isDragging) return;
+      
+      let rect = splitContainer.getBoundingClientRect();
+      // Obtener posicion X real (mouse o touch)
+      let x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      
+      // Limitar a los bordes
+      let percentage = (x / rect.width) * 100;
+      percentage = Math.max(0, Math.min(100, percentage));
+      
+      // Mover elementos
+      splitAfter.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+      splitSlider.style.left = `${percentage}%`;
+    };
+
+    // Iniciar arrastre
+    splitContainer.addEventListener('mousedown', () => isDragging = true);
+    splitContainer.addEventListener('touchstart', () => isDragging = true, {passive: true});
+
+    // Detener arrastre
+    window.addEventListener('mouseup', () => isDragging = false);
+    window.addEventListener('touchend', () => isDragging = false);
+
+    // Arrastrar
+    window.addEventListener('mousemove', onSlide);
+    window.addEventListener('touchmove', onSlide, {passive: true});
+  }
+
 });
