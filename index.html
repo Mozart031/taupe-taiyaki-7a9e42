@@ -3,99 +3,354 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fynx Elite | Controla tus finanzas con IA</title>
-  <meta name="description" content="Fynx Elite: La aplicación definitiva para el control de tus finanzas mediante inteligencia artificial y simulaciones predictivas.">
-  
+  <title>Fynx Elite | Control Total de tus Finanzas con IA</title>
+  <meta name="description" content="Fynx Elite: La app definitiva para controlar tus finanzas con IA. Dashboard predictivo, diagnóstico automático, seguridad biométrica y modo Élite sin límites.">
+
+  <!-- Open Graph (WhatsApp, Instagram, Facebook) -->
+  <meta property="og:title" content="Fynx Elite | Control Total de tus Finanzas con IA">
+  <meta property="og:description" content="Predice tu flujo de caja, detecta gastos impulsivos y toma decisiones inteligentes. Descarga gratis en Android.">
+  <meta property="og:image" content="https://fynxelite.app/assets/og-preview.png">
+  <meta property="og:url" content="https://fynxelite.app">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fynx Elite | Control Total de tus Finanzas con IA">
+  <meta name="twitter:description" content="Predice tu flujo de caja, detecta gastos impulsivos y toma decisiones inteligentes.">
+  <meta name="twitter:image" content="https://fynxelite.app/assets/og-preview.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/styles.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css?v=7">
 </head>
 <body>
 
-  <nav>
-    <div class="logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
         <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
         <path d="M2 17l10 5 10-5"></path>
         <path d="M2 12l10 5 10-5"></path>
       </svg>
       FYNX ELITE
-    </div>
-    <div class="nav-links">
-      <a href="#about" class="mono">SOBRE FYNX</a>
-      <a href="#screenshots" class="mono">VISTAZO</a>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a href="#features" class="mono">FUNCIONES</a>
+      <a href="#pricing" class="mono">PLANES</a>
+      <a href="#screenshots" class="mono">CAPTURAS</a>
+      <a href="#faq" class="mono">FAQ</a>
       <a href="privacidad.html" class="mono">PRIVACIDAD</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <section class="hero fade-in">
-    <h1>El Poder del Control Financiero Total</h1>
-    <p>Fynx Elite analiza tus finanzas, predice tu flujo de caja y te ayuda a tomar decisiones inteligentes con inteligencia artificial predictiva.</p>
-    <div class="waitlist-container">
-      <form id="waitlist-form" class="waitlist-form">
-        <input type="email" id="waitlist-email" placeholder="Tu correo electrónico" required />
-        <button type="submit" id="waitlist-btn" class="btn-primary">Unirme a la lista VIP</button>
-      </form>
-      <p id="waitlist-message" class="waitlist-message"></p>
-      <a href="privacidad.html" class="hero-privacy-link">Política de Privacidad</a>
-      <p class="play-store-text">🚀 Próximamente en Google Play</p>
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features" class="mono">FUNCIONES</a>
+    <a href="#pricing" class="mono">PLANES</a>
+    <a href="#screenshots" class="mono">CAPTURAS</a>
+    <a href="#faq" class="mono">FAQ</a>
+    <a href="privacidad.html" class="mono">PRIVACIDAD</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge fade-up">✦ App para Android</div>
+    <h1 class="fade-up">El Poder del Control<br><span class="gold-text">Financiero Total</span></h1>
+    <p class="fade-up">Fynx Elite analiza tus finanzas, predice tu flujo de caja y te ayuda a tomar decisiones inteligentes con inteligencia artificial predictiva.</p>
+
+    <div class="hero-ctas fade-up">
+      <a href="https://play.google.com/store/apps/details?id=com.mozart032.fynx" target="_blank" rel="noopener" class="play-store-btn" id="play-store-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3.18 23.76c.34.19.72.24 1.1.14l12.02-6.93L13 13.7 3.18 23.76zM.5 1.83C.19 2.2 0 2.73 0 3.38v17.24c0 .65.19 1.18.5 1.55l.08.08L10.3 12v-.23L.58 1.75.5 1.83zM20.12 10.31l-2.98-1.72-3.42 3.42 3.42 3.42 3-1.73c.86-.5.86-1.9-.02-2.39zM4.28.1L16.3 7.03l-3.3 3.3L4.28.1z"/>
+        </svg>
+        Descargar en Google Play
+      </a>
+      <div class="waitlist-container fade-up">
+        <p class="waitlist-label">¿No tienes Android? Recibe noticias de iOS:</p>
+        <form id="waitlist-form" class="waitlist-form">
+          <input type="email" id="waitlist-email" placeholder="Tu correo electrónico" required autocomplete="email" />
+          <button type="submit" id="waitlist-btn" class="btn-primary">Avisarme</button>
+        </form>
+        <p id="waitlist-message" class="waitlist-message"></p>
+        <a href="privacidad.html" class="hero-privacy-link">Política de Privacidad</a>
+      </div>
     </div>
+
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
   </section>
 
-  <section id="about" class="about">
-    <h2 class="fade-in">La Inteligencia detrás del Caos</h2>
-    <div class="about-content fade-in">
-      <p>Olvídate de las hojas de cálculo confusas y de llegar a fin de mes sin saber a dónde se fue tu dinero. Fynx Elite toma tus registros diarios, calcula tu consistencia y simula tus próximos meses para que nunca te quedes sin liquidez.</p>
+  <!-- STATS BAR -->
+  <div class="stats-bar fade-up">
+    <div class="stat-item">
+      <span class="stat-value gold-text">100%</span>
+      <span class="stat-label">Local & Privado</span>
     </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value gold-text">IA</span>
+      <span class="stat-label">Análisis Predictivo</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value gold-text">0</span>
+      <span class="stat-label">Datos vendidos</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value gold-text">Gratis</span>
+      <span class="stat-label">Para empezar</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features" class="about">
+    <h2 class="fade-up">La Inteligencia detrás del Caos</h2>
+    <p class="about-content fade-up">Olvídate de las hojas de cálculo confusas y de llegar a fin de mes sin saber a dónde se fue tu dinero. Fynx Elite toma tus registros diarios, calcula tu consistencia y simula tus próximos meses.</p>
 
     <div class="features-grid">
-      <div class="feature-card fade-in">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📊</div>
         <h3>Dashboard Predictivo</h3>
-        <p>No solo miras el pasado. Fynx calcula tu "Runway" y te alerta antes de que te quedes sin dinero basándose en tus patrones reales.</p>
+        <p>No solo miras el pasado. Fynx calcula tu "Runway" y te alerta antes de que te quedes sin dinero, basándose en tus patrones reales de gasto.</p>
       </div>
-      <div class="feature-card fade-in">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🤖</div>
         <h3>Diagnóstico de IA</h3>
         <p>TARS, nuestro motor interno, detecta gastos impulsivos y evalúa la salud de tu presupuesto para mantener tu Score financiero en alto.</p>
       </div>
-      <div class="feature-card fade-in">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🔐</div>
         <h3>Seguridad Extrema</h3>
-        <p>Bloqueo biométrico nativo, modo supervivencia y cifrado local completo. Tus finanzas te pertenecen solo a ti.</p>
+        <p>Bloqueo biométrico nativo, modo supervivencia y cifrado local completo. Tus finanzas te pertenecen solo a ti. Sin servidores externos.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📸</div>
+        <h3>Escáner de Recibos</h3>
+        <p>Fotografía tu recibo y la IA extrae automáticamente el monto, categoría y descripción. Registra gastos en segundos.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🎯</div>
+        <h3>Metas de Ahorro</h3>
+        <p>Crea metas con fecha y monto objetivo. Fynx te muestra cuánto ahorrar por semana y activa el redondeo automático en cada gasto.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">⚡</div>
+        <h3>Modo Freno</h3>
+        <p>Activa el freno de emergencia para bloquear categorías de gasto impulsivo durante 48h. Disciplina financiera en piloto automático.</p>
       </div>
     </div>
   </section>
 
+  <!-- DEMO -->
+  <section class="demo-section">
+    <div class="container">
+      <h2 class="fade-up" style="text-align:center;margin-bottom:12px;color:var(--gold);">Experimenta Fynx Elite en Vivo</h2>
+      <p class="fade-up" style="text-align:center;color:var(--text-muted);margin-bottom:40px;font-size:0.95rem;">Demo interactiva — toca y explora como si fuera tu teléfono</p>
+      <div class="demo-wrapper fade-up">
+        <div class="demo-phone-notch"></div>
+        <iframe src="demo_standalone.html" class="demo-iframe" frameborder="0" scrolling="no" loading="lazy" title="Demo interactiva de Fynx Elite"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing-section">
+    <h2 class="fade-up">Elige tu Plan</h2>
+    <p class="pricing-subtitle fade-up">Empieza gratis. Sube cuando lo necesites.</p>
+    <div class="pricing-grid">
+
+      <div class="pricing-card fade-up">
+        <div class="pricing-tier">GRATUITO</div>
+        <div class="pricing-price">RD$0 <span>/mes</span></div>
+        <ul class="pricing-features">
+          <li>✓ Dashboard y gastos ilimitados</li>
+          <li>✓ Registro de deudas y metas</li>
+          <li>✓ Análisis mensual básico</li>
+          <li>✓ Bloqueo biométrico</li>
+          <li>✓ 3 escaneos de recibos con IA</li>
+          <li class="muted">✗ Diagnóstico TARS completo</li>
+          <li class="muted">✗ Simulador predictivo</li>
+          <li class="muted">✗ Modo Freno avanzado</li>
+          <li class="muted">✗ Sin anuncios</li>
+        </ul>
+        <a href="https://play.google.com/store/apps/details?id=com.mozart032.fynx" target="_blank" rel="noopener" class="pricing-btn-outline">Descargar Gratis</a>
+      </div>
+
+      <div class="pricing-card pricing-card--elite fade-up">
+        <div class="pricing-badge">⭐ MÁS POPULAR</div>
+        <div class="pricing-tier gold-text">ÉLITE</div>
+        <div class="pricing-price gold-text">RD$299 <span>/mes</span></div>
+        <ul class="pricing-features">
+          <li>✓ Todo lo del plan gratuito</li>
+          <li>✓ Diagnóstico TARS ilimitado</li>
+          <li>✓ Simulador predictivo de 6 meses</li>
+          <li>✓ Escaneos de recibos ilimitados</li>
+          <li>✓ Modo Freno avanzado</li>
+          <li>✓ Reportes PDF exportables</li>
+          <li>✓ Gastos compartidos</li>
+          <li>✓ Sin anuncios</li>
+          <li>✓ Soporte prioritario</li>
+        </ul>
+        <a href="https://play.google.com/store/apps/details?id=com.mozart032.fynx" target="_blank" rel="noopener" class="btn-primary pricing-btn">Obtener Élite</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
   <section id="screenshots" class="screenshots">
-    <h2 class="fade-in">Arquitectura Deep Space</h2>
+    <h2 class="fade-up">Arquitectura Deep Space</h2>
+    <p class="fade-up" style="color:var(--text-muted);margin-bottom:50px;font-size:0.95rem;">Diseño oscuro premium, construido para durar.</p>
     <div class="gallery">
-      <div class="mockup fade-in">
-        <img src="assets/dashboard.png" alt="Fynx Elite Dashboard Principal">
+      <div class="mockup fade-up">
+        <img src="assets/dashboard.png" alt="Fynx Elite Dashboard Principal" loading="lazy">
+        <div class="mockup-label">Dashboard</div>
       </div>
-      <div class="mockup fade-in">
-        <img src="assets/predictor.png" alt="Fynx Elite Simulador Predictivo">
+      <div class="mockup fade-up">
+        <img src="assets/predictor.png" alt="Fynx Elite Simulador Predictivo" loading="lazy">
+        <div class="mockup-label">Predictor</div>
       </div>
-      <div class="mockup fade-in">
-        <img src="assets/settings.png" alt="Fynx Elite Seguridad y Ajustes">
+      <div class="mockup fade-up">
+        <img src="assets/settings.png" alt="Fynx Elite Seguridad y Ajustes" loading="lazy">
+        <div class="mockup-label">Ajustes</div>
       </div>
     </div>
   </section>
 
-  <footer>
-    <div class="logo">FYNX ELITE</div>
-    <div class="support">Soporte: soporte@fynxelite.app</div>
-    <div class="footer-links">
-      <a href="privacidad.html">Política de Privacidad</a>
-      <a href="#">Términos de Servicio</a>
+  <!-- REVIEWS -->
+  <section class="reviews-section">
+    <h2 class="fade-up">Lo que dicen los usuarios</h2>
+    <div class="reviews-grid">
+      <div class="review-card fade-up">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Llevo 3 meses con Fynx y por primera vez en mi vida sé exactamente cuánto dinero tengo y cuánto me dura. El simulador predictivo es increíble."</p>
+        <div class="review-author">— Carlos M., Santo Domingo</div>
+      </div>
+      <div class="review-card fade-up">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"El escáner de recibos me cambió la vida. Antes olvidaba anotar todo. Ahora solo saco foto y listo. Super rápido."</p>
+        <div class="review-author">— Daniela R., Santiago</div>
+      </div>
+      <div class="review-card fade-up">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"El Modo Freno es genial. Me bloqueé a mí mismo las compras impulsivas por 48h y ahorré más ese fin de semana que en el mes anterior."</p>
+        <div class="review-author">— Luis F., La Vega</div>
+      </div>
     </div>
-    <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 20px;">
-      &copy; 2026 Fynx Elite. Todos los derechos reservados.
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="faq-section">
+    <h2 class="fade-up">Preguntas Frecuentes</h2>
+    <div class="faq-list">
+      <div class="faq-item fade-up">
+        <button class="faq-question" aria-expanded="false">
+          ¿Es segura mi información financiera?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sí, totalmente. Todos tus datos se almacenan <strong>localmente en tu dispositivo</strong>. Fynx no sube tus finanzas a ningún servidor externo. Además, la app incluye bloqueo biométrico nativo para que solo tú puedas acceder.</p>
+        </div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-question" aria-expanded="false">
+          ¿Funciona sin conexión a internet?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sí. Las funciones principales (registro de gastos, ingresos, metas, deudas y el dashboard) funcionan completamente sin internet. Solo el escáner de recibos con IA y el diagnóstico TARS requieren conexión.</p>
+        </div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-question" aria-expanded="false">
+          ¿En qué moneda trabaja la app?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Fynx soporta múltiples monedas. Al configurar tu cuenta puedes elegir RD$ (Peso Dominicano), USD, EUR y más. Ideal tanto para usuarios locales como internacionales.</p>
+        </div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-question" aria-expanded="false">
+          ¿Cómo funciona el plan Élite?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>El plan Élite se activa por suscripción mensual directamente desde la app a través de Google Play. Incluye el diagnóstico completo de IA, simulador predictivo de 6 meses, escaneos ilimitados y sin anuncios. Puedes cancelar en cualquier momento.</p>
+        </div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-question" aria-expanded="false">
+          ¿Está disponible para iPhone (iOS)?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Actualmente Fynx Elite está disponible solo para Android. Estamos trabajando en la versión para iOS. Deja tu correo arriba para recibir una notificación cuando llegue a iPhone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section fade-up">
+    <h2>¿Listo para tomar el control?</h2>
+    <p>Descarga Fynx Elite gratis y empieza hoy mismo.</p>
+    <a href="https://play.google.com/store/apps/details?id=com.mozart032.fynx" target="_blank" rel="noopener" class="play-store-btn play-store-btn--large">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3.18 23.76c.34.19.72.24 1.1.14l12.02-6.93L13 13.7 3.18 23.76zM.5 1.83C.19 2.2 0 2.73 0 3.38v17.24c0 .65.19 1.18.5 1.55l.08.08L10.3 12v-.23L.58 1.75.5 1.83zM20.12 10.31l-2.98-1.72-3.42 3.42 3.42 3.42 3-1.73c.86-.5.86-1.9-.02-2.39zM4.28.1L16.3 7.03l-3.3 3.3L4.28.1z"/>
+      </svg>
+      Descargar en Google Play
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+          FYNX ELITE
+        </div>
+        <p class="footer-tagline">Tu dinero, tu control.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">App</div>
+        <a href="https://play.google.com/store/apps/details?id=com.mozart032.fynx" target="_blank" rel="noopener">Google Play</a>
+        <a href="#pricing">Planes</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacidad.html">Política de Privacidad</a>
+        <a href="terminos.html">Términos de Servicio</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Soporte</div>
+        <a href="mailto:soporte@fynxelite.app">soporte@fynxelite.app</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Fynx Elite. Todos los derechos reservados.</span>
     </div>
   </footer>
 
   <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=2"></script>
 </body>
 </html>

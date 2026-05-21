@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fynx Elite — Interactive Demo</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0D0D0D;
+            --gold: #D4AF37;
+            --gold-dim: rgba(212, 175, 55, 0.2);
+            --cyan: #4AFFE7;
+            --cyan-dim: rgba(74, 255, 231, 0.1);
+            --text: #E0E0E0;
+            --text-dim: #888888;
+            --border: rgba(212, 175, 55, 0.3);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Mockup de Teléfono */
+        .phone-mockup {
+            width: 375px;
+            height: 750px;
+            background: #000;
+            border-radius: 40px;
+            border: 8px solid #1A1A1A;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8), 0 0 40px rgba(212, 175, 55, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 500px) {
+            .phone-mockup {
+                width: 100vw;
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        /* Header de la App */
+        .app-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            z-index: 10;
+        }
+
+        .logo {
+            font-weight: 900;
+            letter-spacing: -1px;
+            font-size: 1.2rem;
+        }
+
+        .logo span { color: var(--gold); }
+
+        /* Contenedor de Pasos */
+        .screens-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(20px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        /* TARS Bubble */
+        .tars-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            border-top: 1px solid var(--cyan);
+            padding: 25px;
+            z-index: 100;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tars-tag {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .tars-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        /* Botones */
+        .btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            align-self: flex-end;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Paso 1: Dashboard */
+        .card {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .balance-label { font-size: 0.8rem; color: var(--text-dim); }
+        .balance-value { font-size: 2.2rem; font-weight: 900; margin: 5px 0; color: #fff; }
+
+        .cash-flow-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .flow-item {
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .flow-label { font-size: 0.7rem; color: var(--text-dim); }
+        .flow-val { font-weight: 700; font-size: 1rem; }
+        .flow-val.inc { color: var(--cyan); }
+        .flow-val.exp { color: #FF4A6B; }
+
+        .ratio-bar {
+            height: 6px;
+            background: #1A1A1A;
+            border-radius: 3px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ratio-fill {
+            position: absolute;
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* Paso 2: Score */
+        .score-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-bg { fill: none; stroke: #1A1A1A; stroke-width: 10; }
+        .score-fill { 
+            fill: none; 
+            stroke: var(--gold); 
+            stroke-width: 10; 
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .score-number {
+            position: absolute;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .score-grade {
+            margin-top: 15px;
+            background: var(--gold-dim);
+            color: var(--gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.5s 1.5s;
+        }
+
+        .factor-list { width: 100%; margin-top: 30px; }
+        .factor-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+        }
+        .factor-pts { font-weight: bold; }
+        .factor-pts.pos { color: var(--cyan); }
+        .factor-pts.neg { color: #FF4A6B; }
+
+        /* Paso 3: Estrategia */
+        .goal-card {
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            margin-bottom: 12px;
+        }
+        .goal-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .goal-name { font-weight: 700; font-size: 0.9rem; }
+        .goal-pct { color: var(--gold); font-weight: bold; font-size: 0.8rem; }
+        .progress-bg { height: 4px; background: #1A1A1A; border-radius: 2px; }
+        .progress-fill { height: 100%; background: var(--cyan); border-radius: 2px; width: 0%; transition: width 1.5s 0.5s; }
+
+        /* Paso 4: TARS Terminal */
+        .terminal {
+            background: #000;
+            flex: 1;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .term-prompt { color: var(--cyan); margin-bottom: 15px; }
+        .term-response { color: #fff; }
+
+        /* CTA Final */
+        .cta-screen {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+        .cta-logo { font-size: 2.2rem; margin-bottom: 15px; font-weight: 900; }
+        .cta-logo span { color: var(--gold); }
+        
+        .pre-register-form {
+            width: 100%;
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cta-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            text-align: center;
+        }
+
+        .cta-input:focus { border-color: var(--gold); }
+
+        .cta-btn {
+            background: var(--gold);
+            color: #000;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .cta-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Progress Dots */
+        .progress-dots {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 20;
+        }
+        .dot { width: 6px; height: 6px; background: #333; border-radius: 50%; transition: background 0.3s; }
+        .dot.active { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+
+        /* Utils */
+        .fade-in { animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .typewriter::after {
+            content: '█';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="phone-mockup">
+        <div class="progress-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="app-header">
+            <div class="logo">FYNX <span>ELITE</span></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+            </svg>
+        </div>
+
+        <div class="screens-container">
+            
+            <!-- STEP 0: WELCOME -->
+            <div class="screen active" id="step-0">
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                    <div style="font-size: 5rem; opacity: 0.1; position: absolute;">FYNX</div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 80px; filter: grayscale(1) invert(1) brightness(2);" alt="">
+                </div>
+            </div>
+
+            <!-- STEP 1: DASHBOARD -->
+            <div class="screen" id="step-1">
+                <div class="card">
+                    <div class="balance-label">Balance Total</div>
+                    <div class="balance-value">RD$ <span id="balance-val">0</span></div>
+                    <div class="cash-flow-grid">
+                        <div class="flow-item">
+                            <div class="flow-label">Ingresos</div>
+                            <div class="flow-val inc">RD$ 62,500</div>
+                        </div>
+                        <div class="flow-item">
+                            <div class="flow-label">Gastos</div>
+                            <div class="flow-val exp">RD$ 17,300</div>
+                        </div>
+                    </div>
+                    <div class="ratio-bar"><div class="ratio-fill" style="width: 72%;"></div></div>
+                </div>
+
+                <div class="card" style="border: 1px dashed var(--cyan);">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div style="width: 30px; height: 30px; background: var(--cyan-dim); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--cyan); font-size: 0.7rem;">✦</span>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.7rem; color: var(--cyan); font-weight: bold;">TARS INSIGHT</div>
+                            <div style="font-size: 0.75rem;">Ahorro este mes: 72%. Nivel Elite.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: SCORE -->
+            <div class="screen" id="step-2">
+                <div class="score-container">
+                    <div class="score-circle">
+                        <svg class="score-svg" width="180" height="180">
+                            <circle class="score-bg" cx="90" cy="90" r="70"></circle>
+                            <circle id="score-fill-el" class="score-fill" cx="90" cy="90" r="70"></circle>
+                        </svg>
+                        <div class="score-number" id="score-num">0</div>
+                    </div>
+                    <div class="score-grade" id="score-grade">BUENO</div>
+
+                    <div class="factor-list">
+                        <div class="factor-item">
+                            <span>Ahorro Sólido</span>
+                            <span class="factor-pts pos">+40 pts</span>
+                        </div>
+                        <div class="factor-item">
+                            <span>Presupuesto Controlado</span>
+                            <span class="factor-pts pos">+30 pts</span>
+                        </div>
+                        <div class="factor-item">
+                            <span>Baja Consistencia</span>
+                            <span class="factor-pts neg">-10 pts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: STRATEGY -->
+            <div class="screen" id="step-3">
+                <h3 style="font-size: 1.1rem; margin-bottom: 20px;">Estrategia de Metas</h3>
+                
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-name">Viaje a Japón</span>
+                        <span class="goal-pct">63%</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 63%;"></div></div>
+                    <div style="font-size: 0.65rem; color: var(--text-dim); margin-top: 5px;">RD$ 110,250 / RD$ 175,000</div>
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-name">MacBook Pro M3</span>
+                        <span class="goal-pct">32%</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 32%;"></div></div>
+                </div>
+
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-name">Fondo de Emergencia</span>
+                        <span class="goal-pct">79%</span>
+                    </div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 79%;"></div></div>
+                </div>
+            </div>
+
+            <!-- STEP 4: TARS ACTION -->
+            <div class="screen" id="step-4">
+                <div class="terminal">
+                    <div class="term-prompt">> Analiza mis finanzas</div>
+                    <div class="term-response" id="term-out"></div>
+                </div>
+            </div>
+
+            <!-- STEP 5: CTA -->
+            <div class="screen cta-screen" id="step-5">
+                <div class="cta-logo">FYNX <span>ELITE</span></div>
+                <div style="font-size: 1rem; font-weight: bold; margin-bottom: 5px;">¡Tour Finalizado!</div>
+                <p style="font-size: 0.85rem; color: var(--text-dim); line-height: 1.4; max-width: 250px;">
+                    Sé el primero en dominar sus finanzas con inteligencia real.
+                </p>
+
+                <form class="pre-register-form" id="demo-form">
+                    <input type="email" id="demo-email" class="cta-input" placeholder="Tu correo electrónico" required>
+                    <button type="submit" id="demo-submit" class="cta-btn">Notificarme Lanzamiento</button>
+                    <p id="demo-msg" style="font-size: 0.75rem; margin-top: 5px; min-height: 18px;"></p>
+                </form>
+                
+                <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 25px; cursor: pointer; text-decoration: underline;" onclick="window.parent.location.href='#about'">
+                    Ver más funciones
+                </p>
+            </div>
+
+        </div>
+
+        <!-- TARS Bubble -->
+        <div class="tars-overlay">
+            <div class="tars-tag">TARS // SYSTEMS</div>
+            <div class="tars-text" id="main-tars-text"></div>
+            <button class="btn" id="next-btn">
+                <span>Siguiente</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            {
+                text: "=== SECURE CONNECTION ESTABLISHED ===\nBuenas. Soy TARS, el motor de inteligencia de Fynx Elite.",
+                btn: "Iniciar Tour"
+            },
+            {
+                text: "Esto es tu Centro de Comando financiero. Tu balance en tiempo real y una barra que te dice si dominas tu dinero.",
+                btn: "Siguiente →"
+            },
+            {
+                text: "Tu Fynx Score es tu salud financiera en un número. El objetivo es llevarlo a 95+.",
+                btn: "Siguiente →"
+            },
+            {
+                text: "Aquí defines a dónde va tu dinero antes de que desaparezca. Cada peso tiene un destino.",
+                btn: "Siguiente →"
+            },
+            {
+                text: "Esto soy yo trabajando para ti. No solo registro números — los analizo y te digo exactamente qué hacer.",
+                btn: "Siguiente →"
+            },
+            {
+                text: "Eso es Fynx Elite. Control total. Estrategia real. La app es gratuita, el control no tiene precio.",
+                btn: "Finalizar"
+            }
+        ];
+
+        let currentStep = 0;
+        const tarsEl = document.getElementById('main-tars-text');
+        const nextBtn = document.getElementById('next-btn');
+        const dots = document.querySelectorAll('.dot');
+
+        function typeWriter(text, element, speed = 30) {
+            element.innerHTML = "";
+            element.classList.add('typewriter');
+            let i = 0;
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    if (i >= text.length) {
+                        clearInterval(interval);
+                        element.classList.remove('typewriter');
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        async function goToStep(step) {
+            // Desactivar botones durante animación
+            nextBtn.style.opacity = "0.3";
+            nextBtn.style.pointerEvents = "none";
+
+            // Cambiar Pantallas
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+
+            // Actualizar Dots
+            dots.forEach((d, i) => {
+                if (i <= step) d.classList.add('active');
+                else d.classList.remove('active');
+            });
+
+            // Lógica específica de cada paso
+            if (step === 1) {
+                animateNumber(0, 45200, 1500, document.getElementById('balance-val'));
+            }
+            if (step === 2) {
+                setTimeout(() => {
+                    animateNumber(0, 79, 2000, document.getElementById('score-num'));
+                    const fill = document.getElementById('score-fill-el');
+                    const offset = 440 - (440 * 79) / 100;
+                    fill.style.strokeDashoffset = offset;
+                    document.getElementById('score-grade').style.opacity = "1";
+                }, 500);
+            }
+            if (step === 4) {
+                const terminalText = "He procesado tus datos del mes.\n\nBalance: RD$45,200\nAhorro: 23% del ingreso ✓\nAlerta: Gastos en ocio superaron el límite en un 18%.\n\nRecomendación: Redirigir RD$2,400 a tu meta de Viaje a Japón.";
+                typeWriter(terminalText, document.getElementById('term-out'), 20);
+            }
+
+            // Escribir texto de TARS
+            nextBtn.querySelector('span').innerText = steps[step].btn;
+            await typeWriter(steps[step].text, tarsEl);
+
+            nextBtn.style.opacity = "1";
+            nextBtn.style.pointerEvents = "auto";
+        }
+
+        function animateNumber(start, end, duration, element) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const val = Math.floor(progress * (end - start) + start);
+                element.innerHTML = val.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                goToStep(currentStep);
+            } else {
+                // Finalizar - Ocultar TARS y mostrar CTA final sin overlay
+                document.querySelector('.tars-overlay').style.display = 'none';
+            }
+        });
+
+        // Iniciar
+        window.onload = () => {
+            goToStep(0);
+            
+            // Config Firebase (Copiado de main.js)
+            const firebaseConfig = {
+                apiKey: "AIzaSyBLglzupI41PY6W7VJ5c_-EQ_vbbVDBbf0",
+                authDomain: "fynx-f09d8.firebaseapp.com",
+                projectId: "fynx-f09d8",
+                storageBucket: "fynx-f09d8.firebasestorage.app",
+                messagingSenderId: "184364852664",
+                appId: "1:184364852664:android:3c67cf6da748f0e8291b4d"
+            };
+
+            let db;
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+            }
+
+            // Lógica de formulario en demo
+            const demoForm = document.getElementById('demo-form');
+            const demoEmail = document.getElementById('demo-email');
+            const demoSubmit = document.getElementById('demo-submit');
+            const demoMsg = document.getElementById('demo-msg');
+
+            if (demoForm) {
+                demoForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = demoEmail.value.trim();
+                    if (!email || !db) return;
+
+                    demoSubmit.disabled = true;
+                    demoSubmit.innerText = "Guardando...";
+
+                    try {
+                        await db.collection("waitlist_leads").add({
+                            email: email,
+                            source: "demo_interactiva",
+                            timestamp: new Date().toISOString()
+                        });
+                        demoMsg.style.color = "var(--cyan)";
+                        demoMsg.innerText = "¡Listo! Serás notificado muy pronto.";
+                        demoEmail.value = "";
+                        demoSubmit.innerText = "¡Registrado!";
+                    } catch (err) {
+                        console.error(err);
+                        demoMsg.style.color = "#FF4A6B";
+                        demoMsg.innerText = "Error. Intenta de nuevo.";
+                        demoSubmit.disabled = false;
+                        demoSubmit.innerText = "Notificarme Lanzamiento";
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>
